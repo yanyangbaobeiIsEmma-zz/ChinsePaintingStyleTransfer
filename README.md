@@ -7,4 +7,4 @@ Traditional Chinese painting known as "Guo-hua"(国画) is very different from W
 
 In this project We start with preparing our dataset, which includes source dataset (realistic photos of people, flowers, birds, and landscapes), and target dataset (Chinese paintings including "Gong-bi"(工笔) and "Shui-mo"(水墨)). First we will examine the model introduced by Gatys et al.\cite{NeuralStyle} in both "Gong-bi" and "Shui-mo" paintings. Then we train cycle-GAN with our own dataset in order to convert a realistic photo to Chinese painting. Since "Gong-bi" and "Shui-mo" differ from each another in their colors, narrative subjects, level of details and so on, we train these two categories separately. We will compare the performance of Gatys et al. CNN model with cycle-GANs qualitatively and quantitatively, and discuss their pros and cons. Then we introduce our own three approaches of combing cycle-GANs and Gatys'CNN based model for Chinese painting style transfer.
 
-Try out our approach on http://20.185.103.117:5000/ and have fun!
+Try out our own approach on http://20.185.103.117:5000/ and have fun!
