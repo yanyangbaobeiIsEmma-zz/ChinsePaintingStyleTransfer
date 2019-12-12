@@ -79,23 +79,11 @@ def get_style_model_and_losses_gan(gan, normalization_mean, normalization_std,
     # normalization module
     normalization = Normalization(normalization_mean, normalization_std).to(device)
 
-    # just in order to have an iterable access to or list of content/syle
-    # losses
     content_losses = []
     style_losses = []
 
-    # assuming that cnn is a nn.Sequential, so we make a new nn.Sequential
-    # to put in modules that are supposed to be activated sequentially
-    #model = nn.Sequential(normalization)
     model = nn.Sequential()
-#     #   (0): ReflectionPad2d((3, 3, 3, 3))
-#     (1): Conv2d(3, 64, kernel_size=(7, 7), stride=(1, 1))
-#     (2): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-#     (3): ReLU(inplace=True)
-#     (4): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
-#     (5): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-#     (6): ReLU(inplace=True)
-#     (7): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+
     i = 0  # increment every time we see a conv
     for layer in gan.children():
         if isinstance(layer, nn.Conv2d):
@@ -206,7 +194,6 @@ def run_style_transfer(net, normalization_mean, normalization_std,
                                                                          style_img, content_img,
                                                                          content_layers=content_layers,
                                                                          style_layers=style_layers)
-    print(input_img)
     optimizer = get_input_optimizer(input_img, optimizer = optimizer)
 
     print('Optimizing..')
@@ -258,7 +245,6 @@ def run_style_transfer(net, normalization_mean, normalization_std,
     f.close()
     # a last correction...
     input_img.data.clamp_(0, 1)
-    print(input_img)
 
     return input_img
 

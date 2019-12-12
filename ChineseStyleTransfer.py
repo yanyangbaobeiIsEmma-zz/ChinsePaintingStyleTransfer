@@ -5,6 +5,7 @@ from model import  *
 from torchvision.utils import save_image
 from torch.autograd import Variable
 import argparse
+import os
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -54,6 +55,7 @@ if __name__== "__main__":
 
 
     if model_type.endswith("gan"):
+        style = "NA"
         output_path =  args.output_folder + '_'.join([content, model_type]).lstrip('_') + "_output.jpg"
         if "gongbi" in model_type:
             output, _ = gan_generator_eval("gongbi", args.content_img, output_path)
@@ -84,6 +86,7 @@ if __name__== "__main__":
                     input_img, _ = gan_generator_eval("gongbi", args.content_img, tmp_output)
                 else:
                     input_img, _ = gan_generator_eval("shuimo", args.content_img, tmp_output)
+                os.remove(tmp_output)
 
         elif model_type.endswith("finetune"):
             ''' we use gan fine tune with style loss and content loss '''
@@ -98,6 +101,7 @@ if __name__== "__main__":
             else:
                 input_img, transferModel = gan_generator_eval("shuimo", args.content_img, tmp_output)
             #transferModel = gan_finetue(ganModel, content_img, style_img)
+            os.remove(tmp_output)
 
         else:
             ''' we use gan generator model '''
@@ -110,6 +114,7 @@ if __name__== "__main__":
                 input_img, transferModel = gan_generator_eval("gongbi", args.content_img, tmp_output)
             else:
                 input_img, transferModel = gan_generator_eval("shuimo", args.content_img, tmp_output)
+            os.remove(tmp_output)
 
         print("model_type= {}, style_weight = {}, content_weight = {}, num_steps = {}".format(model_type, style_weight, content_weight, num_steps))
         output = run_style_transfer(transferModel, cnn_normalization_mean, cnn_normalization_std,
@@ -117,11 +122,13 @@ if __name__== "__main__":
                                     model_type=model_type, optimizer=optimizer,
                                     num_steps=num_steps, style_weight=style_weight,
                                     content_weight=content_weight)
+        output_path = args.output_folder + '_'.join(["content", content, "style", style, model_type, optimizer, str(args.num_steps), str(args.style_weight),
+                                   str(args.content_weight)]) + "_output.jpg"
+
     plt.figure()
     imshow(output, title=model_type + ' Output Image')
     plt.ioff()
     plt.show()
-    output_path = args.output_folder + '_'.join(["content", content, "style", style, model_type, optimizer, str(args.num_steps), str(args.style_weight),
-                                   str(args.content_weight)]) + "_output.jpg"
+
     save_image(output, output_path)
 

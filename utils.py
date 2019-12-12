@@ -74,6 +74,7 @@ def patch_instance_norm_state_dict(state_dict, module, keys, i=0):
 ''' gan generator evaluation '''
 def gan_generator_eval(model, input, output):
     input_img = Image.open(input)
+    input_img = input_img.resize((imsize, imsize))
     if model == "shuimo":
         gan_weights = torch.load("./Shuimo-Generator.pth")
     else: #Gongbi
